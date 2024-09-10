@@ -1,28 +1,48 @@
 import React, { useState } from 'react';
 import { Accounts } from 'meteor/accounts-base';
-import { useNavigate } from 'react-router-dom';
+import { Route, useNavigate } from 'react-router-dom';
 import { RoutePaths } from './RoutePaths';
+import { ErrorAlert } from './components/ErrorAlert';
 
 export const SignUp = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const showError = ({ message }) => {
+    setError(message);
+    setTimeout(() => {
+      setError('');
+    }, 3000);
+  };
+
+  const showSuccess = ({ message }) => {
+    setSuccess(message);
+    setTimeout(() => {
+      setSuccess('');
+    }, 3000);
+  };
 
   const signUp = (e) => {
     e.preventDefault();
-    Accounts.createUser({ email, password }, (error) => {
-      if (error) {
-        console.error('Error creating user', error);
+    Accounts.createUser({ email, password }, (err) => {
+      if (err) {
+        showError({ message: err.reason });
         return;
       }
+      setEmail('');
+      setPassword('');
       console.log('Success');
+      navigate(RoutePaths.HOME);
     });
   };
 
   return (
     <div className="flex flex-col items-center">
       <h3 className="px-3 py-2 text-base text-lg font-medium">Sign Up</h3>
-
+      {error && <ErrorAlert message={error} />}
       <form className="mt-6">
         <div className="flex flex-col space-y-4">
           <div className="">
