@@ -1,5 +1,5 @@
-
 export const RoutePaths = {
-    HOME: '/',
-    ACCESS: '/access',
-}
+  HOME: '/',
+  ACCESS: '/access',
+  FORGOT_PASSWORD: '/forgot-password',
+};

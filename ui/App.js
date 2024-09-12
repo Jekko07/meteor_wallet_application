@@ -1,17 +1,21 @@
 import React from 'react';
 import { Header } from './Header.js';
-import { BrowserRouter, Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './Router.js';
+import { AlertProvider, Alert } from 'meteor/quave:alert-react-tailwind';
 
 export const App = () => (
   <BrowserRouter>
-    <div>
-      <Header />
-      <div className="min-h-full">
-        <div className="mx-auto max-w-4xl p-2">
-          <AppRoutes />
+    <AlertProvider>
+      <div>
+        <Header />
+        <Alert />
+        <div className="min-h-full">
+          <div className="mx-auto max-w-4xl p-2">
+            <AppRoutes />
+          </div>
         </div>
       </div>
-    </div>
+    </AlertProvider>
   </BrowserRouter>
 );
