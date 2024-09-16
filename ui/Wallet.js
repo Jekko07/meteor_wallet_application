@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
+import { useLoggedUser } from 'meteor/quave:logged-user-react';
 import { Modal } from './components/Modal.js';
 import { SelectContact } from './components/SelectContact.js';
 import { ContactsCollection } from '../api/collections/ContactsCollection.js';
@@ -8,8 +9,9 @@ import { WalletsCollection } from '../api/collections/WalletsCollection.js';
 import { Loading } from './components/Loading.js';
 
 export const Wallet = () => {
-  const isLoadingContacts = useSubscribe('contacts');
-  const isLoadingWallets = useSubscribe('wallets');
+  const { loggedUser } = useLoggedUser();
+  const isLoadingContacts = useSubscribe('myContacts');
+  const isLoadingWallets = useSubscribe('myWallet');
   const contacts = useFind(() =>
     ContactsCollection.find(
       { archived: { $ne: true } },
@@ -17,23 +19,12 @@ export const Wallet = () => {
     )
   );
 
-  // Fetch the wallet or initialize one if it doesn't exist
-  const [wallet, walletLoading] = useFind(() => WalletsCollection.find());
-
-  React.useEffect(() => {
-    if (!walletLoading && !wallet) {
-      Meteor.call('wallets.insert', (error) => {
-        if (error) {
-          console.error('Error creating wallet:', error);
-        }
-      });
-    }
-  }, [walletLoading, wallet]);
+  const [wallet] = useFind(() => WalletsCollection.find());
 
   const [open, setOpen] = React.useState(false);
   const [isTransferring, setIsTransferring] = React.useState(false);
   const [amount, setAmount] = React.useState(0);
-  const [destinationWallet, setDestinationWallet] = React.useState({});
+  const [destinationContact, setDestinationContact] = React.useState({});
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const addTransaction = () => {
@@ -47,7 +38,7 @@ export const Wallet = () => {
       {
         isTransferring,
         sourceWalletId: wallet._id,
-        destinationWalletId: destinationWallet?.walletId || '',
+        destinationContactId: destinationContact?._id || '',
         amount: Number(amount),
       },
       (errorResponse) => {
@@ -62,7 +53,7 @@ export const Wallet = () => {
           }
         } else {
           setOpen(false);
-          setDestinationWallet({});
+          setDestinationContact({});
           setAmount(0);
           setErrorMessage('');
         }
@@ -70,24 +61,27 @@ export const Wallet = () => {
     );
   };
 
-  if (isLoadingContacts() || isLoadingWallets() || walletLoading) {
+  if (isLoadingContacts() || isLoadingWallets()) {
     return <Loading />;
   }
 
-  if (!wallet) {
-    return <Loading />;
-  }
+  // if (!wallet) {
+  //   return <Loading />;
+  // }
 
   return (
     <div>
       <div className="my-10 flex font-sans shadow-md">
         <form className="flex-auto p-6">
           <div className="flex flex-wrap">
-            <div className="w-full flex-none text-sm font-medium text-gray-500">
-              Main Account
-            </div>
             <div className="mt-2 w-full flex-none text-sm font-medium text-gray-500">
-              Wallet ID:
+              Email:
+            </div>
+            <h1 className="flex-auto text-lg font-semibold text-gray-700">
+              {loggedUser?.email}
+            </h1>
+            <div className="mt-2 w-full flex-none text-sm font-medium text-gray-500">
+              Email:
             </div>
             <h1 className="flex-auto text-lg font-semibold text-gray-700">
               {wallet._id}
@@ -138,8 +132,8 @@ export const Wallet = () => {
                 <SelectContact
                   title="Destination contact"
                   contacts={contacts}
-                  selectedContact={destinationWallet}
-                  setContact={setDestinationWallet}
+                  selectedContact={destinationContact}
+                  setContact={setDestinationContact}
                 />
               </div>
             )}

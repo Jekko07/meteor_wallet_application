@@ -43,7 +43,7 @@ const ContactItem = memo(({ contact, onRemove }) => (
 ));
 
 export const ContactList = () => {
-  const isLoading = useSubscribe('contacts');
+  const isLoading = useSubscribe('myContacts');
   const contacts = useFind(() =>
     ContactsCollection.find(
       { removed: { $ne: true } },

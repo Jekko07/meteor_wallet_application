@@ -2,7 +2,7 @@
   "name": "meteor-wallet",
   "private": true,
   "scripts": {
-    "start": "meteor --exclude-archs web.browser.legacy,web cordova",
+    "start": "meteor --exclude-archs web.browser.legacy,web cordova --settings",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"
@@ -51,6 +51,6 @@
     }
   },
   "resolutions": {
-  "@humanwhocodes/config-array": "@eslint/config-array"
-}
+    "@humanwhocodes/config-array": "@eslint/config-array"
+  }
 }
