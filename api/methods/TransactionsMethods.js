@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 import {
   TransactionsCollection,
   ADD_TYPE,
@@ -6,6 +7,8 @@ import {
 } from '../collections/TransactionsCollection';
 import SimpleSchema from 'simpl-schema';
 import 'meteor/aldeed:collection2/static';
+import { WalletRoles } from '../../infra/WalletRoles';
+import { Roles } from 'meteor/alanning:roles';
 
 Meteor.methods({
   'transactions.insert'(args) {
@@ -42,5 +45,20 @@ Meteor.methods({
       createdAt: new Date(),
       userId,
     });
+  },
+  'transactions.remove'(transactionId) {
+    const { userId } = this;
+    if (!userId) {
+      throw Meteor.Error('Access denied');
+    }
+
+    check(transactionId, String);
+
+    //ensures the user cant remove transaction through the console
+    if (!Roles.userIsInRole(userId, WalletRoles.ADMIN)) {
+      throw new Error('Permission denied!');
+    }
+
+    return TransactionsCollection.remove(transactionId);
   },
 });

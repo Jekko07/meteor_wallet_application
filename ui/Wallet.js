@@ -65,10 +65,6 @@ export const Wallet = () => {
     return <Loading />;
   }
 
-  // if (!wallet) {
-  //   return <Loading />;
-  // }
-
   return (
     <div>
       <div className="my-10 flex font-sans shadow-md">
@@ -81,7 +77,7 @@ export const Wallet = () => {
               {loggedUser?.email}
             </h1>
             <div className="mt-2 w-full flex-none text-sm font-medium text-gray-500">
-              Email:
+              Wallet ID:
             </div>
             <h1 className="flex-auto text-lg font-semibold text-gray-700">
               {wallet._id}

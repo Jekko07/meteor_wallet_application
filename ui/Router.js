@@ -6,6 +6,8 @@ import { Access } from './Access';
 import { RoutePaths } from './RoutePaths';
 import { LoggedUserOnly } from './components/LoggedUserOnly';
 import { AnonymousOnly } from './components/AnonymousOnly';
+import { RemoveTransaction } from './RemoveTransaction';
+import { AdminOnly } from './components/AdminOnly';
 
 export const AppRoutes = () => (
   <Routes>
@@ -23,6 +25,14 @@ export const AppRoutes = () => (
         <AnonymousOnly>
           <Access />
         </AnonymousOnly>
+      }
+    />
+    <Route
+      path={RoutePaths.REMOVE_TRANSACTION}
+      element={
+        <AdminOnly>
+          <RemoveTransaction />
+        </AdminOnly>
       }
     />
     <Route path="*" element={<NotFound />} />
