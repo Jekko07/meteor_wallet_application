@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ErrorAlert } from './components/ErrorAlert.js';
 import { SuccessAlert } from './components/SuccessAlert.js';
 
-export const ContactForm = () => {
+export const ContactForm = ({ selectedContact, resetSelectedContact }) => {
   const [name, setName] = React.useState(''); // Formik
   const [email, setEmail] = React.useState('');
   const [imageUrl, setImageUrl] = React.useState('');
   const [walletId, setWalletId] = React.useState('');
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
+
+  useEffect(() => {
+    if (selectedContact) {
+      setName(selectedContact.name || '');
+      setEmail(selectedContact.email || '');
+      setImageUrl(selectedContact.imageUrl || '');
+      setWalletId(selectedContact.walletId || '');
+    } else {
+      // Reset form if not editing
+      setName('');
+      setEmail('');
+      setImageUrl('');
+      setWalletId('');
+    }
+  }, [selectedContact]);
 
   const showError = ({ message }) => {
     setError(message);
@@ -47,22 +62,31 @@ export const ContactForm = () => {
       return;
     }
 
+    // Check if we're updating or inserting
+    const method = selectedContact ? 'contacts.update' : 'contacts.insert';
+    const params = selectedContact
+      ? { contactId: selectedContact._id, name, email, imageUrl, walletId }
+      : { name, email, imageUrl, walletId };
+
     // If all fields are valid, proceed with the Meteor call
-    Meteor.call(
-      'contacts.insert',
-      { name, email, imageUrl, walletId },
-      (errorResponse) => {
-        if (errorResponse) {
-          showError({ message: errorResponse.error });
-        } else {
-          setName('');
-          setEmail('');
-          setImageUrl('');
-          setWalletId('');
-          showSuccess({ message: 'Contact saved.' });
+    Meteor.call(method, params, (errorResponse) => {
+      if (errorResponse) {
+        showError({ message: errorResponse.error });
+      } else {
+        setName('');
+        setEmail('');
+        setImageUrl('');
+        setWalletId('');
+        showSuccess({
+          message: selectedContact ? 'Contact updated.' : 'Contact saved.',
+        });
+
+        // Reset form to default state for adding a new contact
+        if (selectedContact) {
+          resetSelectedContact(); // Calls the reset function to switch back to "Save Contact"
         }
       }
-    );
+    });
   };
 
   return (
@@ -136,13 +160,25 @@ export const ContactForm = () => {
           />
         </div>
       </div>
+
       <div className="px-2 py-3 text-right">
+        {/* Cancel button if the user wants to cancel editing */}
+        {selectedContact && (
+          <button
+            type="button"
+            onClick={resetSelectedContact} // Resets the form to switch back to "Save Contact"
+            className="mr-2 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+        )}
+
         <button
           type="button"
           onClick={saveContact}
           className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
         >
-          Save Contact
+          {selectedContact ? 'Update Contact' : 'Save Contact'}
         </button>
       </div>
     </form>

@@ -6,7 +6,7 @@ Meteor.methods({
   'contacts.insert'({ name, email, imageUrl, walletId }) {
     const { userId } = this;
     if (!userId) {
-      throw Meteor.Error('Access Denied');
+      throw new Meteor.Error('Access Denied');
     }
     check(name, String);
     check(email, String);
@@ -21,12 +21,35 @@ Meteor.methods({
       userId,
     });
   },
+
   'contacts.remove'({ contactId }) {
     check(contactId, String);
     ContactsCollection.remove(contactId);
   },
+
   'contacts.archive'({ contactId }) {
     check(contactId, String);
     ContactsCollection.update({ _id: contactId }, { $set: { archived: true } });
+  },
+
+  'contacts.update'({ contactId, name, email, imageUrl, walletId }) {
+    check(contactId, String);
+    check(name, String);
+    check(email, String);
+    check(imageUrl, String);
+    check(walletId, String);
+
+    return ContactsCollection.update(
+      { _id: contactId },
+      {
+        $set: {
+          name,
+          email,
+          imageUrl,
+          walletId,
+          updatedAt: new Date(),
+        },
+      }
+    );
   },
 });

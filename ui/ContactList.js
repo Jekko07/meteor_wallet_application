@@ -4,9 +4,10 @@ import { ContactsCollection } from '../api/collections/ContactsCollection';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
 import { ErrorAlert } from './components/ErrorAlert';
 import { Loading } from './components/Loading';
+import { ContactForm } from './ContactForm';
 
 // Move ContactItem outside the ContactList component
-const ContactItem = memo(({ contact, onRemove }) => (
+const ContactItem = memo(({ contact, onRemove, onUpdate }) => (
   <li className="flex items-center justify-between space-x-3 py-4">
     <div className="flex min-w-0 flex-1 items-center space-x-3">
       {contact.imageUrl && (
@@ -32,6 +33,13 @@ const ContactItem = memo(({ contact, onRemove }) => (
       <div>
         <a
           href="#"
+          onClick={(event) => onUpdate(event, contact)}
+          className="inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
+        >
+          Edit
+        </a>
+        <a
+          href="#"
           onClick={(event) => onRemove(event, contact._id)}
           className="inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50"
         >
@@ -52,6 +60,7 @@ export const ContactList = () => {
   );
 
   const [success, setSuccess] = useState('');
+  const [selectedContact, setSelectedContact] = useState(null); //state for selected contact
 
   const showSuccess = ({ message }) => {
     setSuccess(message);
@@ -71,6 +80,17 @@ export const ContactList = () => {
     });
   };
 
+  const updateContact = (event, contact) => {
+    event.preventDefault();
+    console.log('Editing contact:', contact);
+    setSelectedContact(contact); // Set the contact to be updated
+  };
+
+  // Function that will reset the form and the button back to "Save Contact"
+  const resetSelectedContact = () => {
+    setSelectedContact(null);
+  };
+
   if (isLoading()) {
     return <Loading />;
   }
@@ -78,6 +98,13 @@ export const ContactList = () => {
   return (
     <div>
       {success && <ErrorAlert message={success} />}
+
+      {/* Pass the resetSelectedContact function to the ContactForm */}
+      <ContactForm
+        selectedContact={selectedContact}
+        resetSelectedContact={resetSelectedContact}
+      />
+
       <div className="mt-10">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
           Contact List
@@ -88,6 +115,7 @@ export const ContactList = () => {
               key={contact._id}
               contact={contact}
               onRemove={removeContact}
+              onUpdate={updateContact}
             />
           ))}
         </ul>
