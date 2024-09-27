@@ -13,7 +13,6 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.0.10",
     "acorn": "^6.0.0",
-    "eslint": "^9.10.0",
     "meteor-node-stubs": "^1.2.10",
     "npm": "^10.8.3",
     "postcss-load-config": "^4.0.1",
@@ -24,8 +23,11 @@
     "simpl-schema": "^3.4.6"
   },
   "devDependencies": {
-    "@quave/eslint-config-quave": "^3.0.0-beta.0",
+    "@eslint/js": "^9.11.1",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react": "^7.37.0",
+    "globals": "^15.9.0",
     "husky": "^9.1.5",
     "postcss": "^8.4.45",
     "prettier": "^2.7.1",
