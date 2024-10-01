@@ -9,9 +9,11 @@ import { WalletsCollection } from '../api/collections/WalletsCollection.js';
 import { Loading } from './components/Loading.js';
 
 export const Wallet = () => {
-  const { loggedUser } = useLoggedUser();
-  const isLoadingContacts = useSubscribe('myContacts');
-  const isLoadingWallets = useSubscribe('myWallet');
+  const { loggedUser } = useLoggedUser(); // Fetching the logged-in user's data
+  const isLoadingContacts = useSubscribe('myContacts'); // Subscribing to contacts data
+  const isLoadingWallets = useSubscribe('myWallet'); // Subscribing to wallets data
+
+  // Fetching contacts from the ContactsCollection where they are not archived
   const contacts = useFind(() =>
     ContactsCollection.find(
       { archived: { $ne: true } },
@@ -19,6 +21,7 @@ export const Wallet = () => {
     )
   );
 
+  // Fetching the first wallet found in the WalletsCollection
   const [wallet] = useFind(() => WalletsCollection.find());
 
   const [open, setOpen] = React.useState(false);
@@ -27,12 +30,14 @@ export const Wallet = () => {
   const [destinationContact, setDestinationContact] = React.useState({});
   const [errorMessage, setErrorMessage] = React.useState('');
 
+  // Function to handle adding a transaction
   const addTransaction = () => {
     if (!wallet) {
       setErrorMessage('Wallet not initialized.');
       return;
     }
 
+    // Calling the 'transactions.insert' Meteor method to add a new transaction
     Meteor.call(
       'transactions.insert',
       {
@@ -52,6 +57,7 @@ export const Wallet = () => {
             setErrorMessage(errorMessages.join('. ')); // Combine messages into a single string
           }
         } else {
+          // Resetting the modal and form state upon successful transaction
           setOpen(false);
           setDestinationContact({});
           setAmount(0);
@@ -61,6 +67,7 @@ export const Wallet = () => {
     );
   };
 
+  // Display loading screen if contacts or wallets data is still being fetched
   if (isLoadingContacts() || isLoadingWallets()) {
     return <Loading />;
   }
@@ -113,16 +120,18 @@ export const Wallet = () => {
         </form>
       </div>
 
+      {/* Modal component for adding or transferring money */}
       <Modal
         open={open}
         setOpen={setOpen}
         title={
           isTransferring
             ? 'Transfer money to other wallet'
-            : 'Add money to your wallet'
+            : 'Add money to your wallet' // Modal title changes based on transaction type
         }
         body={
           <>
+            {/* Contact selector for transferring money */}
             {isTransferring && (
               <div>
                 <SelectContact
@@ -134,6 +143,7 @@ export const Wallet = () => {
               </div>
             )}
 
+            {/* Input field for transaction amount */}
             <div className="mt-2">
               <label
                 htmlFor="amount"
@@ -159,7 +169,8 @@ export const Wallet = () => {
             className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
             onClick={addTransaction}
           >
-            {isTransferring ? 'Transfer' : 'Add'}
+            {isTransferring ? 'Transfer' : 'Add'}{' '}
+            {/* Button text changes based on transaction type */}
           </button>
         }
         errorMessage={errorMessage}

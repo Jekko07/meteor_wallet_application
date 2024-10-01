@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { ErrorAlert } from './components/ErrorAlert.js';
 import { SuccessAlert } from './components/SuccessAlert.js';
 
+// ContactForm component to add or update a contact
 export const ContactForm = ({ selectedContact, resetSelectedContact }) => {
   const [name, setName] = React.useState(''); // Formik
   const [email, setEmail] = React.useState('');
@@ -11,8 +12,10 @@ export const ContactForm = ({ selectedContact, resetSelectedContact }) => {
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
 
+  // useEffect to populate the form with selected contact's data for editing
   useEffect(() => {
     if (selectedContact) {
+      // If a contact is selected, pre-fill the form with its data
       setName(selectedContact.name || '');
       setEmail(selectedContact.email || '');
       setImageUrl(selectedContact.imageUrl || '');
@@ -26,6 +29,7 @@ export const ContactForm = ({ selectedContact, resetSelectedContact }) => {
     }
   }, [selectedContact]);
 
+  // Function to display error messages temporarily
   const showError = ({ message }) => {
     setError(message);
     setTimeout(() => {
@@ -33,6 +37,7 @@ export const ContactForm = ({ selectedContact, resetSelectedContact }) => {
     }, 5000);
   };
 
+  // Function to display success message temporarily
   const showSuccess = ({ message }) => {
     setSuccess(message);
     setTimeout(() => {
