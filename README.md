@@ -20,7 +20,8 @@ This is a MeteorJS application designed to [briefly describe the purpose of your
 - **Frontend**: React, Tailwind CSS
 - **Backend**: MeteorJS
 - **Database**: MongoDB
-- **Packages**: 
+- **Packages**:
+
   - `meteor/accounts-base` for user accounts
   - `meteor/alanning:roles` for role management
   - `quave:alert-react-tailwind` for alert notifications
@@ -43,7 +44,6 @@ This is a MeteorJS application designed to [briefly describe the purpose of your
   - `quave:logged-user-react` Provides a hook for accessing the logged-in user in React components
   - `quave:alert-react-tailwind` Alert notifications for React applications using Tailwind CSS
 
-
 ## Installation
 
 ### Prerequisites
@@ -57,15 +57,21 @@ This is a MeteorJS application designed to [briefly describe the purpose of your
 git clone https://github.com/Jekko07/meteor_wallet_application.git
 cd meteor_wallet_application
 ```
+
 ### Install Meteor packages:
+
 ```bash
 meteor npm install
 ```
+
 ### Start the application:
+
 ```bash
 meteor
 ```
+
 ### Open your browser and navigate to http://localhost:3000.
 
 ## Contributing
+
 If you'd like to contribute to this project, please fork the repository and submit a pull request.
