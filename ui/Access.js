@@ -5,13 +5,15 @@ import { Route, useNavigate } from 'react-router-dom';
 import { RoutePaths } from './RoutePaths';
 import { ErrorAlert } from './components/ErrorAlert';
 
+// Access component for handling user authentication (Sign Up / Sign In)
 export const Access = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(true); // Boolean to toggle between Sign Up and Sign In
 
+  // Helper function to display error messages and auto-hide them after 3 second
   const showError = ({ message }) => {
     setError(message);
     setTimeout(() => {
@@ -19,13 +21,7 @@ export const Access = () => {
     }, 3000);
   };
 
-  const showSuccess = ({ message }) => {
-    setSuccess(message);
-    setTimeout(() => {
-      setSuccess('');
-    }, 3000);
-  };
-
+  // Sign Up function that calls Meteor's Accounts.createUser
   const signUp = (e) => {
     e.preventDefault();
     Accounts.createUser({ email, password }, (err) => {
@@ -40,6 +36,7 @@ export const Access = () => {
     });
   };
 
+  // Sign In function that calls Meteor.loginWithPassword
   const signIn = (e) => {
     e.preventDefault();
     Meteor.loginWithPassword(email, password, (err) => {
@@ -53,10 +50,14 @@ export const Access = () => {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Title dynamically changes between Sign Up and Sign In */}
       <h3 className="px-3 py-2 text-base text-lg font-medium">
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </h3>
+      {/* Error alert displayed if there's an error */}
       {error && <ErrorAlert message={error} />}
+
+      {/* Form for email and password */}
       <form className="mt-6 flex flex-col">
         <div className="flex flex-col space-y-4">
           <div className="">
@@ -70,7 +71,7 @@ export const Access = () => {
               type="text"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)} // Update email state
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               autoComplete="off"
             />
@@ -95,12 +96,15 @@ export const Access = () => {
         </div>
 
         <div className="flex justify-center py-3">
+          {/* Back to Home button */}
           <button
             onClick={() => navigate(RoutePaths.HOME)}
             className="inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
           >
             Back to Home
           </button>
+
+          {/* Sign Up or Sign In button based on isSignUp state */}
           {isSignUp && (
             <button
               onClick={signUp}
@@ -121,10 +125,11 @@ export const Access = () => {
           )}
         </div>
 
+        {/* Toggle between Sign Up and Sign In */}
         <div className="py-3">
           <a
             className="cursor-pointer text-indigo-800"
-            onClick={() => setIsSignUp(!isSignUp)}
+            onClick={() => setIsSignUp(!isSignUp)} // Toggle between Sign Up and Sign In
           >
             {isSignUp
               ? 'If you already have an account, click here'

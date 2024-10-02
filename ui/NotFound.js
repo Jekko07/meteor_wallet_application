@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { RoutePaths } from './RoutePaths';
 
+// NotFound component: displays a 404 error message for unmatched routes
 export const NotFound = () => {
   const navigate = useNavigate();
   return (
@@ -10,8 +11,9 @@ export const NotFound = () => {
       <FaExclamationTriangle className="mb-4 text-6xl text-yellow-400" />
       <h1 className="mb-4 text-6xl font-bold">404 Not Found</h1>
       <p className="mb-5 text-xl">This page does not exist</p>
+      {/* Button to navigate back to the homepage */}
       <button
-        onClick={() => navigate(RoutePaths.HOME)}
+        onClick={() => navigate(RoutePaths.HOME)} // Redirects to home when the button is clicked
         type="button"
         className="mt-4 rounded-md bg-indigo-700 px-3 py-2 text-white hover:bg-indigo-900"
       >
