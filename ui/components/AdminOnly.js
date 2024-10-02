@@ -5,7 +5,7 @@ import { RoutePaths } from '../RoutePaths';
 
 // Component to restrict access to admin users only
 export const AdminOnly = ({ children }) => {
-  const [isAdmin, setIsAdmin] = useState(); // State to store whether the user is an admin or not
+  const [isAdmin, setIsAdmin] = useState(null); // State to store whether the user is an admin or not
   const location = useLocation(); // Hook to access the current route location, used for redirecting
   
   useEffect(() => {

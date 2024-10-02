@@ -15,7 +15,9 @@ export const Header = () => {
     if (loggedUser) {
       Meteor.call('roles.isAdmin', (error, isAdminResult) => {
         if (!error) {
-          setIsAdmin(isAdminResult); // Set state based on admin check
+          setIsAdmin(isAdminResult);
+        } else {
+          console.error('Error checking admin status:', error);
         }
       });
     }
@@ -40,7 +42,9 @@ export const Header = () => {
               {!isLoadingLoggedUser && !loggedUser && (
                 <button
                   className="font-bold text-white"
-                  onClick={() => navigate(RoutePaths.ACCESS)} // Navigate to sign-up page
+                  onClick={() =>
+                    navigate(RoutePaths.ACCESS, { state: { isSignUp: true } })
+                  } // Navigate to sign-up page
                 >
                   Sign Up
                 </button>
@@ -59,7 +63,14 @@ export const Header = () => {
                   )}
                   <button
                     className="rounded-md bg-red-500 px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-red-600"
-                    onClick={() => Meteor.logout(navigate(RoutePaths.ACCESS))} // Logout the user and navigate back to access page
+                    onClick={() => {
+                      Meteor.logout(() => {
+                        // Navigate to ACCESS and set isSignUp to false to show Sign In
+                        navigate(RoutePaths.ACCESS, {
+                          state: { isSignUp: false },
+                        });
+                      });
+                    }} // Logout the user and navigate to the Sign In page
                   >
                     Log Out
                   </button>

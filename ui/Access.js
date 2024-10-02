@@ -1,17 +1,25 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Accounts } from 'meteor/accounts-base';
-import { Route, useNavigate } from 'react-router-dom';
+import { Route, useNavigate, useLocation } from 'react-router-dom';
 import { RoutePaths } from './RoutePaths';
 import { ErrorAlert } from './components/ErrorAlert';
 
 // Access component for handling user authentication (Sign Up / Sign In)
 export const Access = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to access the location object
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isSignUp, setIsSignUp] = useState(true); // Boolean to toggle between Sign Up and Sign In
+  const [isSignUp, setIsSignUp] = useState(true); // Default to Sign Up
+
+  // Check if state exists from navigation and set isSignUp accordingly
+  useEffect(() => {
+    if (location.state && location.state.isSignUp !== undefined) {
+      setIsSignUp(location.state.isSignUp);
+    }
+  }, [location.state]);
 
   // Helper function to display error messages and auto-hide them after 3 second
   const showError = ({ message }) => {
@@ -52,7 +60,7 @@ export const Access = () => {
     <div className="flex flex-col items-center">
       {/* Title dynamically changes between Sign Up and Sign In */}
       <h3 className="px-3 py-2 text-base text-lg font-medium">
-        {isSignUp ? 'Sign Up' : 'Sign In'}
+        {isSignUp ? 'Sign Up' : 'Sign In to your Account'}
       </h3>
       {/* Error alert displayed if there's an error */}
       {error && <ErrorAlert message={error} />}

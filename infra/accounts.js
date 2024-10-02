@@ -1,6 +1,8 @@
 // import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { WalletsCollection } from '../api/collections/WalletsCollection';
+import { Roles } from 'meteor/alanning:roles';
+import { WalletRoles } from './WalletRoles';
 
 // Function is triggered whenever a new user is created
 Accounts.onCreateUser((options, user) => {
@@ -12,6 +14,12 @@ Accounts.onCreateUser((options, user) => {
 
   // Insert a new wallet into the WalletsCollection for the newly created user
   WalletsCollection.insert({ userId: user._id, createdAt: new Date() });
+
+  // Assign the ADMIN role if the email matches
+  if (customizedUser.emails[0].address === 'jranara.webdev@gmail.com') {
+    Roles.addUsersToRoles(customizedUser._id, WalletRoles.ADMIN);
+    console.log(`Assigned ADMIN role to user ${customizedUser._id}`);
+  }
 
   // Customize the user object by adding the user's email to it
   customizedUser.email = user.emails[0].address;
