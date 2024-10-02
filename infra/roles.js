@@ -8,7 +8,7 @@ Roles.createRole(WalletRoles.ADMIN, { unlessExists: true });
 Meteor.startup(() => {
   // Find the user by searching in the 'emails' array for the specific email
   const user = Meteor.users.findOne({
-    'emails.address': 'jranara.webdev@gmail.com',
+    'emails.address': 'admin@gmail.com',
   });
 
   // Check if the user exists and is not already an admin

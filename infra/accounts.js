@@ -16,7 +16,7 @@ Accounts.onCreateUser((options, user) => {
   WalletsCollection.insert({ userId: user._id, createdAt: new Date() });
 
   // Assign the ADMIN role if the email matches
-  if (customizedUser.emails[0].address === 'jranara.webdev@gmail.com') {
+  if (customizedUser.emails[0].address === 'admin@gmail.com') {
     Roles.addUsersToRoles(customizedUser._id, WalletRoles.ADMIN);
     console.log(`Assigned ADMIN role to user ${customizedUser._id}`);
   }
