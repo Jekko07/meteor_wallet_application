@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAlert } from 'meteor/quave:alert-react-tailwind';
 import { RoutePaths } from './RoutePaths';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ErrorAlert } from './components/ErrorAlert';
 
 export const RemoveTransaction = () => {
@@ -10,8 +10,25 @@ export const RemoveTransaction = () => {
   const [transactionId, setTransactionId] = useState('');
   const [error, setError] = useState();
 
+  // Function to handle the removal of a transaction
   const removeTransaction = (e) => {
     e.preventDefault();
+
+    // Check if the transaction ID is empty
+    if (!transactionId.trim()) {
+      // Set an error message if the field is blank
+      const errorMessage = { reason: 'Please enter a Transaction ID.' };
+      setError(errorMessage);
+
+      // Clear error after 3 seconds
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+
+      return;
+    }
+
+    // Call the 'transactions.remove' Meteor method to remove the transaction
     Meteor.call('transactions.remove', transactionId, (err) => {
       if (err) {
         console.error('Error trying to remove a transaction', err);
@@ -39,6 +56,7 @@ export const RemoveTransaction = () => {
             >
               Transaction ID
             </label>
+            {/* Input field for entering the transaction ID */}
             <input
               id="transactionId"
               value={transactionId}
@@ -48,6 +66,7 @@ export const RemoveTransaction = () => {
           </div>
         </div>
         <div className="flex justify-center py-3">
+          {/* Button to navigate back to the home page */}
           <button
             onClick={() => navigate(RoutePaths.HOME)}
             className="inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
@@ -55,6 +74,7 @@ export const RemoveTransaction = () => {
             Back to Home
           </button>
 
+          {/* Button to trigger the removeTransaction function */}
           <button
             onClick={removeTransaction}
             type="submit"
