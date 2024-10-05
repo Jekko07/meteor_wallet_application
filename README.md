@@ -1,6 +1,7 @@
 # My MeteorJS Application
 
-![Project Logo](path/to/logo.png) <!-- Replace with your project logo path -->
+## Admin User UI
+public/images/MeteorWalletUI.png 
 
 ## Description
 
