@@ -1,7 +1,7 @@
 # My MeteorJS Application
 
 ## Admin User UI
-public/images/MeteorWalletUI.png 
+![MeteorWalletUI](https://github.com/user-attachments/assets/357492f9-1367-4562-86f4-51129a7ec48b)
 
 ## Description
 
