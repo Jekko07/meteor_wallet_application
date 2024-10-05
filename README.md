@@ -73,6 +73,9 @@ meteor
 
 ### Open your browser and navigate to http://localhost:3000.
 
+### Tools Used for Managing Collections in MongoDB
+NoSQLBooster for MongoDB
+
 ## Contributing
 
 If you'd like to contribute to this project, please fork the repository and submit a pull request.
