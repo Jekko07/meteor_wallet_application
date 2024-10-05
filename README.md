@@ -75,7 +75,7 @@ meteor
 
 ## Tools Used for Managing Collections in MongoDB
 
-NoSQLBooster for MongoDB
+- NoSQLBooster for MongoDB
 
 ## Contributing
 
