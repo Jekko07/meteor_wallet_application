@@ -1,7 +1,8 @@
 # My MeteorJS Application
 
 ## Admin User UI
-![MeteorWalletUI](https://github.com/user-attachments/assets/357492f9-1367-4562-86f4-51129a7ec48b)
+![2024-09-26 09-35-46](https://github.com/user-attachments/assets/b2a237f5-62ca-4d8d-bfbe-c3817c1901e2)
+
 
 ## Description
 
