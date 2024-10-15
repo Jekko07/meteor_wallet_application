@@ -6,9 +6,9 @@
 
 ## Description
 
-This is a MeteorJS application designed to [briefly describe the purpose of your app, e.g., manage contacts, handle transactions, etc.]. The app allows users to [list key features, e.g., sign up, log in, manage their wallets, etc.].
+This is a MeteorJS application designed to [briefly describe the purpose of your app, e.g., manage contacts, handle transactions, etc.]. 
 
-## Features
+## Main Features
 
 - User authentication (Sign Up, Sign In)
 - Admin role management
